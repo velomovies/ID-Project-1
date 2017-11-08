@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<head>
+  <meta charset=utf8>
+  <link rel="shortcut icon" type=image/x-icon href=data:image/x-icon;,>
+  <title>@velomovies</title>
+  <meta content=width=device-width,initial-scale=1 name=viewport>
+  <link rel="stylesheet" href="index.css">
+  <link href="https://fonts.googleapis.com/css?family=Muli:200,400,900" rel="stylesheet">
+</head>
+
+<!-- This code is based on [link] by someone -->
+
+<body>
+  <h1>Drugs Dashboard</h1>
+  <form action="#">
+    <label><input type="radio" name="frequentie" value="0" checked="checked">Ooit drugsgebruikt</label>
+    <label><input type="radio" name="frequentie" value="0">Vaak drugsgebruik</label>
+    <label><input type="radio" name="frequentie" value="0">Weinig drugsgebruik</label>
+  </form>
+  <input class="range" type="range" min="1" max="100" value="22" step="1" list="tickmarks">
+  <svg width="960" height="500"></svg>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="index.js"></script>
+</body>

@@ -1,0 +1,28 @@
+body {
+  font-family: 'Muli', sans-serif;
+}
+
+text {
+  font-family: 'Muli', sans-serif;
+}
+
+input[type=range]
+{
+    -webkit-appearance: slider-vertical; /* WebKit */
+    width: 2em;
+    top: 9em;
+    position: absolute;
+    height: 34em;
+    padding: 0 5px;
+}
+
+rect {
+  transition: all .3s;
+}
+
+.active {
+  cursor: pointer;
+  transition: all .3s;
+  fill: #ededed;
+  stroke: #000;
+}
