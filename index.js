@@ -1,4 +1,4 @@
-//This code is based on [link] by someone. I created my own version of it and added some code.
+//This code is based on https://bl.ocks.org/mbostock/3887235 by Mike Bostock. I created my own version of it and added some code.
 
 var svg = d3.select("body").append("svg").attr("width", 960).attr("height", 500),
   margin = {
