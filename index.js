@@ -126,7 +126,7 @@ function onload(err, doc) {
     })
     .enter().append("a")
     .attr("xlink:href", function(d) {
-      return "/detail.html?d=" + d.key + "&y=" + d.year})
+      return "detail.html?d=" + d.key + "&y=" + d.year})
     .append("rect")
     .attr("width", x1.bandwidth())
     .attr("fill", function(d) {
