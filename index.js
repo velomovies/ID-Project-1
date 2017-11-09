@@ -238,6 +238,16 @@ function onload(err, doc) {
 
     d3.select("form").on("change", update)
 
+    d3.selectAll("label").on("change", labelActivate)
+
+    function labelActivate() {
+      activeLabel = this.parentNode.querySelectorAll("label")
+      for (k = 0; k < activeLabel.length; k++) {
+        activeLabel[k].classList.remove("activeLabel")
+    }
+      this.classList.add("activeLabel")
+    }
+
     function update() {
 
       dataUpdate = d3.nest()

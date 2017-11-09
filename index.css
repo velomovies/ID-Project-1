@@ -79,7 +79,7 @@ h1 {
 
 header {
   padding: 1em;
-  margin-bottom: 1em;
+  margin-bottom: 2em;
   box-shadow: 0 .1em 2em #ededed;
 }
 
@@ -87,11 +87,32 @@ text {
   font-family: 'Muli', sans-serif;
 }
 
+form {
+  margin-left: 3em;
+}
+
+form label {
+  border: .1em solid #283F3B;
+  padding: .5em;
+  cursor: pointer;
+}
+
+input[type=radio]
+{
+  display: none;
+}
+
+
+.activeLabel {
+  background: #283F3B;
+  color: #fff;
+}
+
 input[type=range]
 {
     -webkit-appearance: slider-vertical; /* WebKit */
     width: 2em;
-    top: 14em;
+    top: 13.5em;
     position: absolute;
     height: 34em;
     padding: 0 5px;

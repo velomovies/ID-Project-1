@@ -351,7 +351,7 @@ function onload(err, doc) {
       return color(d.data.geslacht); })
 
   arc.append("text")
-    .attr("transform", function(d) { console.log(label.centroid(d)[0])
+    .attr("transform", function(d) {
       return "translate(" + (label.centroid(d)[0] - 20) + "," + label.centroid(d)[1] + ")"; })
     .attr("dy", "0.35em")
     .text(function(d) {
@@ -359,7 +359,7 @@ function onload(err, doc) {
      })
 
   arc.append("text")
-    .attr("transform", function(d) { console.log(label.centroid(d)[0])
+    .attr("transform", function(d) {
       return "translate(" + (label.centroid(d)[0] - 15) + "," + (label.centroid(d)[1] + 20) + ")"; })
     .attr("dy", "0.35em")
     .text(function(d) {
