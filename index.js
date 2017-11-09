@@ -1,6 +1,6 @@
 //This code is based on [link] by someone. I created my own version of it and added some code.
 
-var svg = d3.select("svg"),
+var svg = d3.select("body").append("svg").attr("width", 960).attr("height", 500),
   margin = {
     top: 20,
     right: 20,
@@ -119,11 +119,15 @@ function onload(err, doc) {
       return keys.map(function(key) {
         return {
           key: key,
-          value: d[key]
+          value: d[key],
+          year: d.categorie
         }
       })
     })
-    .enter().append("rect")
+    .enter().append("a")
+    .attr("xlink:href", function(d) {
+      return "/detail.html?d=" + d.key + "&y=" + d.year})
+    .append("rect")
     .attr("width", x1.bandwidth())
     .attr("fill", function(d) {
       return z(d.key)
@@ -133,9 +137,8 @@ function onload(err, doc) {
       return x1(d.key)
     })
       .transition()
-      .duration(1000)
+      .duration(100)
       .delay(function(d, i) {
-        console.log(d, i)
         return i * 100 })
     .attr("y", function(d) {
       return y(d.value)
@@ -203,8 +206,6 @@ function onload(err, doc) {
     d3.selectAll(".bar").on("mouseover", active)
 
     function active(e) {
-      console.log(this, this.getAttribute("x"))
-
        this.classList.add("active")
 
        d3.select(this.parentNode)
@@ -305,7 +306,7 @@ function onload(err, doc) {
           })
         })
           .transition()
-          .duration(1000)
+          .duration(500)
           .ease(d3.easeBounce)
           .delay(function(d, i) { return i * 100 })
         .attr("x", function(d) {
