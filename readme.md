@@ -9,89 +9,144 @@ For project 1 of Information Design I made a little dashboad to really experienc
 
 ## Background
 
-For the last assessment of frontend 3 I used all my skills I learned with previous examples. With those skills I made an dashboard where you can see data about how and how much there is traveled in the Netherlands. The data is ordered by year. 
+For project 1 of Information Design I had to use all that I learned with frontend and make an usefull datavisualisation. I wanted a vey cool dashboard with a lot of functions. Unfortunataly my data wasn't complete so I had to improvise a little. I eventually made a overview and a detail page.
 
 When I downloaded the data I saw directly that I had to clean it. This was an easy (but really necessary) part. In the data specification you can see how I cleaned it. 
 
-The next step was to visualize the data in a correct way. I used a map of the Netherlands and I had to connect my data to it. The color was an array of fixed colorcodes. I changed it with my own color set (a gradient) and made sure the correct color was used for the correct province. 
+The next step was to visualize the data in a correct way. I used a grouped bar chart and made it my own. I made it easy to compare and to read. Next to that I made a custom second page that shows the detail.
 
 The code I wrote for that was:
 ```javascript
-.style("fill", function(d, i) {
-        function locationCheck() {
-          if (locations[i].properties) {
-            return locations[i].properties.name + " (PV)"
-          }
+  data = d3.nest()
+    .key(function(d) {
+      return d.jaar
+    })
+    .entries(cleanData)
+    .map(function(d) {
+        return {
+          categorie: d.key,
+          Cannabis: d.values[0].cannabisgebruik_ooit,
+          Amfetamine: d.values[0].amfetaminegebruik_ooit,
+          Ecstasy: d.values[0].ecstasygebruik_ooit,
+          Cocaïne: d.values[0].cocainegebruik_ooit,
+          Overig: d.values[0].overige_drugsgebruik_ooit
         }
-        for (var k = 0; k < loc.length; k++) {
-          if (loc[k].key == locationCheck()) {
-              var color = loc[k].values[0].y2010
-              return colour(color)
-          }
-        }
-      })
-```
-The next step was to add another chart. I chose a bar chart and made it myself. I chose to make a new svg so that I could move them separately and to make easier selections later on. I used examples we got in the class. To load in a bar chart created the rect:
-```javascript
-svg2.attr("class", "chart").selectAll("rect")
-      .data(data.sort(sortNumber))
-      .enter()
-      .append("g")
-      .append("rect")
-        .style("width", "0")
-        .style("height", "40px")
-        .attr("transform", function(d, i) { return "translate(200," + ((i + 1) * 41) + ")" })
-          .transition()
-          .delay(function(d, i) { return i * 100 })
-          .duration(1000)
-          .ease(d3.easeBounceOut)
-        .style("width", function(d) { return (xChart(d) * 1) + "px" })
-        .style("fill", function(d, i) { return colour(i + 25) })
-```
-Then I made sure the data became interactive. When a certain province is clicked it will show that data in the chart. I did that by setting an `on("click")` on the provinces and fire a function that updated the barchart
-```javascript
-svg.selectAll("path").attr("class", "").on("click", updateChart)
+    })
 
-    function updateChart(d, i) {
-    
-        ...Code
+  var keys = function() {
+      data["columns"] = [
+        "categorie",
+        "Cannabis",
+        "Amfetamine",
+        "Ecstasy",
+        "Cocaïne",
+        "Overig"
+      ]
+      return data.columns.slice(1)
+  }()
+```
+Then I made sure the data became interactive. I made a few [.on("change", function())] that ran code to update certain parts of the data. All together they make it so you can interactively can browse the whole dataset 
+```javascript
+  d3.select(".range").on("change", scaleUpdate)
+
+    function scaleUpdate(e) {
+      
+        ...code
+      
+    }
+
+    d3.selectAll(".bar").on("mouseover", active)
+
+    function active(e) {
+
+        ...code
+
+    }
+
+    d3.selectAll(".bar").on("mouseout", inactive)
+
+    function inactive(e) {
+        
+        ...code
         
     }
+
+    d3.selectAll("label").on("change", labelActivate)
+
+    function labelActivate() {
+        
+        ...code
+        
+    }
+
+    d3.select("form").on("change", update)
+
+    function update() {
+        ...code
+    }
 ```
-This was the basic functionality of my chart, but because I had some time left I opted to make a year selection. This turned out to be really dificult, because there where to charts to update. Next to that it had to remember the selection to use in other scenarios. In the end I made code to check what item is selected and from there it changes the data. I used the check a few times but they all look like this:
+The next step was to add the second page. I chose a pie chart and I re-used the group chart. I chose to make two svg's so that I could move them separately and to make easier selections later on. To load in two charts I created two svg's:
 ```javascript
-if(sel.value == 2010) {
-    ...sets something with .y2010
-} else if(sel.value == 2011) {
-    ...sets something with .y2011
-} else if(sel.value == 2012) {
-    ...sets something with .y2012
-} else if(sel.value == 2013) {
-    ...sets something with .y2013
-} else if(sel.value == 2014) {
-    ...sets something with .y2014
-} else if(sel.value == 2015) {
-    ...sets something with .y2015
-}
+var svg = d3.select("body").append("svg").attr("width", 600).attr("height", 500),
+  svg2 = d3.select("body").append("svg").attr("width", 600).attr("height", 500),
+  margin = {
+    top: 20,
+    right: 20,
+    bottom: 30,
+    left: 40
+  },
+  width = +svg.attr("width") - margin.left - margin.right,
+  height = +svg.attr("height") - margin.top - margin.bottom,
+  g = svg.append("g").attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+  g2 = svg2.attr("transform", "translate(30,0)").append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 ```
 
-> Next to all the big code changes I made a few little design changes. I used a google font (questrial) and made sure the visualization had a fun transition
+For updating the charts I made a few checks. The checks could be nicer and would have a be more efficient if I had more time. The reason I chose to leave it like it is, is because it works. I made checks for selected buttons, selected range and parameters (for the detail page).  Here you see a few scripts I made for that:
+
+To check which button is clicked 
+```javascript
+if (ooitDrugs.checked) {
+            ...doingsomething
+          } else if (veelDrugs.checked) {
+            ...doingsomething
+          } else if (weinigDrugs.checked) {
+            ...doingsomething
+          }
+```
+
+To check the parameters
+```javascript
+var url_string = window.location.href,
+  url = new URL(url_string),
+  year = url.searchParams.get("y"),
+  drugs = url.searchParams.get("d")
+```
+
+To check the value of the range input
+```javascript
+var scale = document.querySelector(".range").value
+```
+
+> Next to all the big code changes I made a few little design changes (Making it more like a dashboard). I used a google font (muli) and made sure the visualization had a fun transition. And last but not least I made my own logo for the dashboard
 
 ## List of changes
-* Connecting data to the map of the Netherlands
+
+* Change the format of the data
+* Connecting data to the grouped bar chart
 * Using a different color
-* Adding a "g"
-* Setting up my own legend for the map
 * Making a hover (with `mouseenter` and `mouseout)`
 * Adding a barchart
-* Updating the barchart `on("click")`
+* Updating the barchart `on("change")`
 * Adding smooth transitions
-* Making custom labels
-* Setting transitions on labels
-* Making a reset click on the `h1`
-* Setting a selection tool
+* Making custom tooltip and compare tool
+* Setting up a scale selection
 * Updating `on("change")` of selection
 * Making sure the correct data shown in the correct graph
+* Making another page
+* Using custom link with parameters
+* Redoing the whole process of making a chart
+* Make sure the data is in the right format
+* Change the colors
 
 > Happy end! 
 
