@@ -1,7 +1,7 @@
 # Using some drugs
 
-In this assessment I used a dirty dataset, cleaned it and got multiple charts fully functioning. One chart is based [`bl.ock`](This code is based on http://bl.ocks.org/phil-pedruco/9344373 by Phil Pedruco.) by
-[**@Mike Bostock**](https://github.com/phil-pedruco) (GPL-3.0).
+For project 1 of Information Design I made a little dashboad to really experience drugs. I used two charts based on [`bl.ock`](This code is based on https://bl.ocks.org/mbostock/3887051 and https://bl.ocks.org/mbostock/3887235 by Mike Bostock.) by
+[**@Mike Bostock**](https://github.com/mike-bostock) (GPL-3.0).
 
 ![Preview image](logo.png)
 > My work
@@ -97,38 +97,51 @@ if(sel.value == 2010) {
 
 ## Data
 
-[`Dataset`](http://statline.cbs.nl/Statweb/publication/?DM=SLNL&PA=83497ned&D1=0&D2=a&D3=0,5-16&D4=a&HDR=T,G3&STB=G1,G2&VW=T). 
+[`Dataset`](http://statline.cbs.nl/Statweb/publication/?DM=SLNL&PA=83021ned&D1=25-45
+&D2=0-13,37-52&D3=0&D4=a&HDR=T&STB=G1,G2,G3&VW=T). 
 
 For this assessment I used an CBS dataset and cleaned it with this code:
 ```javascript
-  var header = doc.indexOf("Vervoerwijzen")
+    var header = doc.indexOf("Kenmerken personen")
   doc = doc.slice(header)
   end = doc.indexOf("\n", doc)
   doc = doc.slice(end).trim()
-  doc = doc.replace(/"+/g, "").replace(/;+/g, ",")
+  doc = doc.replace(/,/g, "").replace(/"+/g, "").replace(/;+/g, ",")
   end = doc.indexOf("�")
   doc = doc.substring(0, end).trim()
-  data = d3.csvParseRows(doc, map)
+  cleanData = d3.csvParseRows(doc, map)
 
   function map(d, i) {
-    if (d[1] == "" || d[2] == "" || d[3] == "" || d[4] == "" || d[5] == "" || d[6] == "" || d[7] == "") {
-      return
-    }
     return {
-      transport: d[0],
-      location: d[1],
-      y2010: Number(d[2]),
-      y2011: Number(d[3]),
-      y2012: Number(d[4]),
-      y2013: Number(d[5]),
-      y2014: Number(d[6]),
-      y2015: Number(d[7]),
+      categorie: d[0],
+      jaar: d[1],
+      cannabisgebruik_maand: Number(d[2]),
+      cannabisgebruik_jaar: Number(d[3]),
+      cannabisgebruik_ooit: Number(d[4]),
+      amfetaminegebruik_maand: Number(d[5]),
+      amfetaminegebruik_jaar: Number(d[6]),
+      amfetaminegebruik_ooit: Number(d[7]),
+      ecstasygebruik_maand: Number(d[8]),
+      ecstasygebruik_jaar: Number(d[9]),
+      ecstasygebruik_ooit: Number(d[10]),
+      cocainegebruik_maand: Number(d[11]),
+      cocainegebruik_jaar: Number(d[12]),
+      cocainegebruik_ooit: Number(d[13]),
+      overige_drugsgebruik_maand: Number(d[14]),
+      overige_drugsgebruik_jaar: Number(d[15]),
+      overige_drugsgebruik_ooit: Number(d[16]),
+      totaal_drugsgebruik_maand: Number(d[16]),
+      totaal_drugsgebruik_jaar: Number(d[16]),
+      totaal_drugsgebruik_ooit: Number(d[16])
     }
 ```
-The dataset is big and has a lot of information per province and year
-* `Provincie` — The data can be ordered by each province of the Netherlands
-* `Jaar` — From 2010 till 2015 is data saved. I have used all data.
-* `Vervoerswijze` — The way there has been traveled in the Netherlands
+After the cleaning I had to use code to map it in to the right format
+
+The dataset comes from CBS and is really extended. CBS is a reliable source and has good researches
+* `Drugs` — The data has information of 5 drug types. 
+* `Jaar` — You can use data from 2014 till 2016
+* `Categorie` — There are a few features you can select the data in. Like household, age, education and money
+* `Perioden` — The data is split up in three sections. From ever used drugs till used it this month.
 
 ## Features
 *   [`d3-format`](https://github.com/d3/d3-format#api-reference)
@@ -140,7 +153,7 @@ The dataset is big and has a lot of information per province and year
     — `d3.select`
     — `on` mouse events
 *   [`d3-request`](https://github.com/d3/d3-request#api-reference)
-    — `d3.tsv`
+    — `d3.csv`
     — Loading files
 *   [`d3-scale`](https://github.com/d3/d3-scale#api-reference)
     — `d3.range`,  `d3.domain`
