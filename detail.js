@@ -1,6 +1,8 @@
 //This code is based on https://bl.ocks.org/mbostock/3887051 and https://bl.ocks.org/mbostock/3887235 by Mike Bostock. I created my own version of it and added some code.
 
+//The code from this example is a little bit the same as index.js. I will explain the parts that I've not discussed yet.
 var svg = d3.select("body").append("svg").attr("width", 600).attr("height", 500),
+//The difference now is that there will be two charts on one page
   svg2 = d3.select("body").append("svg").attr("width", 600).attr("height", 500),
   margin = {
     top: 20,
@@ -14,6 +16,7 @@ var svg = d3.select("body").append("svg").attr("width", 600).attr("height", 500)
   g = svg.append("g").attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
   g2 = svg2.attr("transform", "translate(30,0)").append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
+//For the pie chart there will be a few standard things. Like the radius, color and some calculations.
 var color = d3.scaleOrdinal(["#556F44", "#95BF74"])
 
 var pie = d3.pie()
@@ -46,10 +49,12 @@ var ooitDrugs = document.getElementsByName("frequentie")[0],
   veelDrugs = document.getElementsByName("frequentie")[1],
   weinigDrugs = document.getElementsByName("frequentie")[2]
 
+//To use the right data there are two parameters in the link. They will help to select the right data.
 var url_string = window.location.href,
   url = new URL(url_string),
   year = url.searchParams.get("y"),
   drugs = url.searchParams.get("d"),
+//Here is a check for the year. When the year is 2015 it will output 0 otherwise it will output 1
   i = Number((year == 2015 ? "0" : "1"))
 
   document.querySelector("h1").innerHTML = "Informatie over: " + drugs
@@ -115,7 +120,7 @@ function onload(err, doc) {
 
     data2.splice(0,18)
 
-
+//The data for the grouped chart was not right. So I had to put it in an own made array. It first checks in the parameters what drugs is selected. With more time I could make this check better readable and more efficient
   groupedData = []
    if(drugs == "Cannabis") {
     groep1 = {
@@ -249,10 +254,11 @@ function onload(err, doc) {
           }
         }
 
+//The right data is pushed in the array. This is the way the code reads the data
   groupedData.push(groep1, groep2, groep3, groep4, groep5)
 
+//As before you have to make sure the columns array is set properly so the code will run right
   var keys = function() {
-
       groupedData["columns"] = [
         "categorie",
         "Inkomen",
@@ -261,6 +267,7 @@ function onload(err, doc) {
       return groupedData.columns.slice(1)
   }()
 
+//For the pie chart I made another dataset
   dataMapped = d3.nest()
     .key(function(d) {
       return d.jaar
@@ -282,6 +289,7 @@ function onload(err, doc) {
         }
     })
 
+//As you can see is this a function that almost does the same as above only with other data. It will check what drugs is chosen. After that it will create a custom dataset.
     function dataSet() {
       data = []
 
@@ -340,16 +348,20 @@ function onload(err, doc) {
 
       return data
   }
+
+//For the pie chart it will make an arc and connect the custom dataset to it
   var arc = g.selectAll(".arc")
     .data(pie(dataSet()))
     .enter().append("g")
       .attr("class", "arc")
 
+//It makes sure the path is right and setting the right color
   arc.append("path")
     .attr("d", path)
     .attr("fill", function(d) {
       return color(d.data.geslacht); })
 
+//Inside the circle I put two text elements so it shows which part is what. Next to that it shows the right percentage
   arc.append("text")
     .attr("transform", function(d) {
       return "translate(" + (label.centroid(d)[0] - 20) + "," + label.centroid(d)[1] + ")"; })
@@ -362,6 +374,7 @@ function onload(err, doc) {
     .attr("transform", function(d) {
       return "translate(" + (label.centroid(d)[0] - 15) + "," + (label.centroid(d)[1] + 20) + ")"; })
     .attr("dy", "0.35em")
+//It will add a text that represents the percentage. I made a calculation myself. The outcome is the right percntage
     .text(function(d) {
       return Math.round(d.data.percentage / (data[0].percentage + data[1].percentage) * 100) + "%"
     })
@@ -369,6 +382,7 @@ function onload(err, doc) {
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
+//This is exactly the same code as index.js. The difference being the position, which is set in earlier code.
 
   x0.domain(groupedData.map(function(d) {
     return d.categorie
