@@ -1,6 +1,6 @@
 # Using some drugs
 
-For project 1 of Information Design I made a little dashboad to really experience drugs. I used two charts based on [`bl.ock`](This code is based on https://bl.ocks.org/mbostock/3887051 and https://bl.ocks.org/mbostock/3887235 by Mike Bostock.) by
+For project 1 of Information Design I made a little dashboad to really experience drugs. I used two charts based on [`bl.ock grouped barchart`](https://bl.ocks.org/mbostock/3887051) and [`bl.ock piechart`](https://bl.ocks.org/mbostock/3887235) by Mike Bostock. by
 [**@Mike Bostock**](https://github.com/mike-bostock) (GPL-3.0).
 
 ![Preview image](logo.png)
@@ -45,7 +45,7 @@ The code I wrote for that was:
       return data.columns.slice(1)
   }()
 ```
-Then I made sure the data became interactive. I made a few [.on("change", function())] that ran code to update certain parts of the data. All together they make it so you can interactively can browse the whole dataset 
+Then I made sure the data became interactive. I made a few `.on("change", function())` that ran code to update certain parts of the data. All together they make it so you can interactively can browse the whole dataset 
 ```javascript
   d3.select(".range").on("change", scaleUpdate)
 
